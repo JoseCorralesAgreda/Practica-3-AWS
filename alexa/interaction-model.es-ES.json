@@ -1,0 +1,25 @@
+{
+  "interactionModel": {
+    "languageModel": {
+      "invocationName": "ambientador inteligente",
+      "intents": [
+        {"name": "VincularIntent", "slots": [{"name": "thingName", "type": "THING_NAME"}], "samples": ["vincula mi ambientador con {thingName}", "vincula el dispositivo {thingName}", "cambia mi ambientador a {thingName}"]},
+        {"name": "DesvincularIntent", "samples": ["desvincula mi ambientador", "elimina mi vinculación"]},
+        {"name": "ActivarIntent", "samples": ["activa el ambientador", "mueve el motor", "pulsa el ambientador"]},
+        {"name": "ActivarAutomaticoIntent", "samples": ["activa el modo automático", "enciende el modo automático"]},
+        {"name": "DesactivarAutomaticoIntent", "samples": ["desactiva el modo automático", "apaga el modo automático"]},
+        {"name": "ConsultarSensorIntent", "samples": ["hay movimiento", "hay presencia", "qué detecta el sensor", "cuál es el estado del sensor"]},
+        {"name": "ConsultarMotorIntent", "samples": ["cuál es el estado del motor", "el motor está activo", "cómo está el ambientador"]},
+        {"name": "ConsultarAutomaticoIntent", "samples": ["está activado el modo automático", "cuál es el modo actual"]},
+        {"name": "AMAZON.HelpIntent", "samples": []},
+        {"name": "AMAZON.CancelIntent", "samples": []},
+        {"name": "AMAZON.StopIntent", "samples": []},
+        {"name": "AMAZON.FallbackIntent", "samples": []}
+      ],
+      "types": [{"name": "THING_NAME", "values": [
+        {"name": {"value": "thing", "synonyms": ["zin", "cing"]}},
+        {"name": {"value": "ambientador-dos", "synonyms": ["ambientador dos"]}}
+      ]}]
+    }
+  }
+}

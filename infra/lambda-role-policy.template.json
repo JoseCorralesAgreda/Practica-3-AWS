@@ -1,0 +1,12 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {"Effect": "Allow", "Action": ["iot:DescribeThing", "iot:GetThingShadow", "iot:UpdateThingShadow"], "Resource": [
+      "arn:aws:iot:us-east-2:443972183454:thing/thing",
+      "arn:aws:iot:us-east-2:443972183454:thing/ambientador-dos"
+    ]},
+    {"Effect": "Allow", "Action": ["dynamodb:GetItem", "dynamodb:PutItem", "dynamodb:DeleteItem"], "Resource": "arn:aws:dynamodb:us-east-2:443972183454:table/AmbientadorVinculaciones"},
+    {"Effect": "Allow", "Action": "logs:CreateLogGroup", "Resource": "arn:aws:logs:us-east-2:443972183454:*"},
+    {"Effect": "Allow", "Action": ["logs:CreateLogStream", "logs:PutLogEvents"], "Resource": "arn:aws:logs:us-east-2:443972183454:log-group:/aws/lambda/Alexa:*"}
+  ]
+}
