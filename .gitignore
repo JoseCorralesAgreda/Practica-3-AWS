@@ -1,0 +1,12 @@
+.pio/
+.venv/
+__pycache__/
+*.pyc
+*.zip
+firmware/include/secrets.h
+*.pem
+*.key
+*.crt
+.env
+.env.*
+!.env.example
