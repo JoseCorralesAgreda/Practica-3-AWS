@@ -1,0 +1,8 @@
+{
+  "Variables": {
+    "IOT_REGION": "us-east-2",
+    "IOT_DATA_ENDPOINT": "https://a2krhgw96q3m1o-ats.iot.us-east-2.amazonaws.com",
+    "BINDINGS_TABLE": "AmbientadorVinculaciones",
+    "ALEXA_SKILL_ID": "amzn1.ask.skill.8f29b895-fb91-4340-9bad-077860e12778"
+  }
+}

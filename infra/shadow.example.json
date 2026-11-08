@@ -1,0 +1,10 @@
+{
+  "state": {
+    "desired": {"automatic": false, "activationId": "demo-unico-001"},
+    "reported": {
+      "automatic": false, "activationId": "demo-unico-001",
+      "presence": false, "pirReady": true, "servoState": "idle", "servoAngle": 0,
+      "cyclesSinceBoot": 1, "uptimeSeconds": 120, "sampledAt": 1794139200
+    }
+  }
+}
