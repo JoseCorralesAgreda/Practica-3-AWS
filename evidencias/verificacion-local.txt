@@ -1,0 +1,29 @@
+Fecha: 2026-11-08
+Entorno: Windows; Python 3.14; PlatformIO 6.2.0; boto3 1.43.126.
+Comando: .\.venv\Scripts\python.exe -B -m unittest discover -s tests -v
+Resultado observado: Ran 22 tests in 0.008s; OK.
+Alcance: clientes AWS simulados, sin red ni credenciales reales.
+
+Comando: .\.venv\Scripts\python.exe -m platformio run -d firmware
+Resultado observado: SUCCESS; Took 71.07 seconds.
+Perfil: esp32dev; espressif32 6.9.0; Arduino ESP32 2.0.17.
+RAM: 46556 / 327680 bytes (14.2%).
+Flash: 929409 / 1310720 bytes (70.9%).
+Librerías: PubSubClient 2.8.0; ArduinoJson 6.21.5; ESP32Servo 1.1.1.
+Configuración: plantilla sin datos reales en secrets.h local ignorado.
+No se cargó firmware ni se desplegó Lambda.
+Advertencia externa: SyntaxWarning en esptool 4.5.1 (return en finally con Python 3.14); compilación completada.
+
+Pendientes: credenciales locales completas, despliegue de código/configuraciones AWS/Alexa y pruebas de integración y físicas.
+
+Actualización tras datos del usuario (2026-11-08):
+Placa confirmada: DOIT ESP32 DEVKIT V1, esp32doit-devkit-v1.
+Región y cuenta IoT: us-east-2, 443972183454.
+Endpoint ATS e ID de skill incorporados en configuraciones.
+Comando: .\.venv\Scripts\python.exe -m platformio run -d firmware
+Resultado observado: SUCCESS; Took 30.50 seconds.
+RAM: 46556 / 327680 bytes (14.2%).
+Flash: 929425 / 1310720 bytes (70.9%).
+Validación JSON de políticas y variables: correcta.
+Git sigue excluyendo firmware/include/secrets.h.
+No se cargó firmware ni se modificaron recursos AWS.
