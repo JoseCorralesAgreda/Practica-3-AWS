@@ -120,7 +120,12 @@ void Ambientador::onMessage(const String& name, byte* payload, unsigned int leng
       dirty = true;
       return;
     }
-    if (name.endsWith("/update/accepted")) return;
+    if (name.endsWith("/update/accepted")) {
+      if (document["state"]["reported"].is<JsonObject>()) {
+        Serial.println("Shadow: actualizacion de reported aceptada por AWS.");
+      }
+      return;
+    }
     uint32_t version = document["version"] | 0UL;
     // Se comparan solo versiones de documentos que contienen desired/delta.
     if (version < lastVersion) return;
@@ -213,8 +218,13 @@ void Ambientador::report(uint32_t now) {
     size_t length = serializeJson(document, payload, sizeof(payload));
     lastPublish = now;
     // QoS 0: el siguiente reporte periódico repara una publicación perdida.
-    if (mqtt.publish((topic + "/update").c_str(), payload, length)) {
+    // Con char* y tres argumentos, length se convierte en retained=true.
+    // Los topicos reservados del Shadow requieren RETAIN=false.
+    if (mqtt.publish((topic + "/update").c_str(),
+                     reinterpret_cast<const uint8_t*>(payload), length, false)) {
       lastReport = now;
       dirty = false;
+    } else {
+      Serial.printf("No se pudo enviar reported; estado MQTT: %d\n", mqtt.state());
     }
   }
