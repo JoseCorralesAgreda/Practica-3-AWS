@@ -12,6 +12,7 @@
 // ESP32 clásico. Confirmar placa y calibrar sin conectar una carga mecánica.
 constexpr int PIR_PIN = 27;
 constexpr int SERVO_PIN = 18;
+constexpr int STATUS_LED_PIN = LED_BUILTIN;
 constexpr int REST_ANGLE = 0;
 constexpr int PRESS_ANGLE = 180;
 constexpr uint32_t SERVO_PHASE_MS = 700;
@@ -25,11 +26,14 @@ Ambientador::Ambientador() : mqtt(tls) {}
 void Ambientador::begin() {
     Serial.begin(115200);
     pinMode(PIR_PIN, INPUT);
+    pinMode(STATUS_LED_PIN, OUTPUT);
+    digitalWrite(STATUS_LED_PIN, LOW);
     storageReady = preferences.begin("ambientador", false);
     lastActivation = preferences.getString("activation", "");
     servo.setPeriodHertz(50);
     servo.attach(SERVO_PIN, 500, 2400);
     servo.write(REST_ANGLE);
+    Serial.printf("Servo: angulo ordenado=%d grados (reposo); LED apagado\n", REST_ANGLE);
     topic = String("$aws/things/") + THING_NAME + "/shadow";
     tls.setCACert(ROOT_CA);
     tls.setCertificate(DEVICE_CERT);
@@ -190,7 +194,9 @@ void Ambientador::updateSensor(uint32_t now) {
   }
 
 void Ambientador::startCycle(uint32_t now) {
+    digitalWrite(STATUS_LED_PIN, HIGH);
     servo.write(PRESS_ANGLE);
+    Serial.printf("Servo: angulo ordenado=%d grados (presion); LED encendido\n", PRESS_ANGLE);
     phase = "pressing";
     phaseStarted = now;
     lastCycle = now;
@@ -204,9 +210,12 @@ void Ambientador::updateServo(uint32_t now) {
     phaseStarted = now;
     if (phase == "pressing") {
       servo.write(REST_ANGLE);
+      Serial.printf("Servo: angulo ordenado=%d grados (retorno); LED encendido\n", REST_ANGLE);
       phase = "returning";
     } else {
+      digitalWrite(STATUS_LED_PIN, LOW);
       phase = "idle";
+      Serial.printf("Servo: ciclo terminado, angulo ordenado=%d grados; LED apagado\n", REST_ANGLE);
       cycles++;
       if (mqtt.connected()) requestShadow();
     }
