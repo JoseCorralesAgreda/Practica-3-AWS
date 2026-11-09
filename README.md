@@ -17,7 +17,7 @@ Base de un ambientador controlado por una skill personalizada de Alexa, con ESP3
 
 1. Abrir «ambientador inteligente» y decir «vincula mi ambientador con thing».
 2. «Activa el ambientador»: solicita un ciclo 0° → 180° → 0° (700 ms por fase).
-3. «Activa el modo automático»: permite un ciclo ante un nuevo flanco de movimiento del PIR, con separación mínima de 60 s desde el último ciclo. Requiere conexión y sincronización con el Shadow.
+3. «Activa el modo automático»: permite un ciclo ante un nuevo flanco de movimiento del PIR, con separación mínima de 5 s (configuración de pruebas) desde el último ciclo. Requiere conexión y sincronización con el Shadow.
 4. «Desactiva el modo automático»: impide nuevos ciclos por PIR; deja terminar el ciclo en curso.
 5. «Hay movimiento», «cuál es el estado del motor» y «está activado el modo automático» consultan `reported`.
 6. «Cambia mi ambientador a ambientador dos» reemplaza la vinculación, si ese Thing existe y está autorizado; «desvincula mi ambientador» la elimina.

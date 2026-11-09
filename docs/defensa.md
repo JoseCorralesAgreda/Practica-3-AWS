@@ -6,7 +6,7 @@
 2. Mostrar `reported` reciente y la estabilización del PIR. Abrir la skill y demostrar usuario sin vínculo.
 3. Vincular `thing`, salir y volver a entrar; enseñar persistencia en DynamoDB.
 4. Preguntar movimiento, accionar manualmente y seguir `desired → delta → reported`.
-5. Habilitar automático por voz, provocar flanco y explicar los 60 s; deshabilitar y verificar que movimiento ya no activa el servo.
+5. Habilitar automático por voz, provocar flanco y explicar los 5 s de enfriamiento para pruebas; deshabilitar y verificar que movimiento ya no activa el servo.
 6. Cambiar vínculo a otro Thing autorizado, mostrar aislamiento de usuarios, rechazar nombre inexistente y desvincular.
 7. Cortar red con alimentación mantenida, solicitar comando, recuperar conexión y comprobar aplicación pendiente.
 8. Presentar mediciones reales de estabilidad, clasificación, latencia y frecuencia. Terminar mostrando límites y mejoras.
@@ -33,7 +33,7 @@
 
 **¿Qué es exactitud en un sensor digital?** Error de clasificación contra ensayos físicos observados: falsos positivos y negativos. No se informa un error de distancia porque el PIR no mide distancia.
 
-**¿Qué evita activaciones continuas?** Solo un flanco LOW→HIGH nuevo, servo libre, modo habilitado, conexión sincronizada y al menos 60 s desde el último ciclo. Mantener HIGH no genera eventos adicionales. Un flanco descartado durante enfriamiento no queda en cola.
+**¿Qué evita activaciones continuas?** Solo un flanco LOW→HIGH nuevo, servo libre, modo habilitado, conexión sincronizada y al menos 5 s desde el último ciclo. Mantener HIGH no genera eventos adicionales. Un flanco descartado durante enfriamiento no queda en cola.
 
 **¿Desactivar el automático detiene el servo a mitad?** No; impide nuevos ciclos automáticos y deja volver al reposo al ciclo en curso. La activación manual sigue disponible.
 

@@ -107,7 +107,7 @@ La función solo necesita DescribeThing, GetThingShadow, UpdateThingShadow, GetI
 | Alexa informa error de servicio | Región, tabla ACTIVE, políticas y logs de Lambda |
 | Alexa no entiende thing | Ver slot reconocido, usar sinónimo o añadir uno adecuado |
 | Servo reinicia ESP32 | Fuente, masa común, caída de tensión y bloqueo mecánico |
-| PIR no vuelve a activar | Retardo del módulo, LOW previo, 60 s de enfriamiento y conexión |
+| PIR no vuelve a activar | Retardo del módulo, LOW previo, 5 s de enfriamiento y conexión |
 | Consulta indica datos viejos | `sampledAt`, NTP, reportes, más de 45 s sin datos |
 
 Al desconectar Internet, no se inician ciclos automáticos; el ciclo ya iniciado termina. Un comando manual pendiente permanece en desired y se aplica al reconectar. Desvincular al usuario no borra el Shadow ni desactiva el modo automático del dispositivo. Antes de desarmar, desactivar el modo y comprobar `reported.automatic=false`.

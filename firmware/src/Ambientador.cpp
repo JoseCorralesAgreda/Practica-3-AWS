@@ -17,7 +17,7 @@ constexpr int REST_ANGLE = 0;
 constexpr int PRESS_ANGLE = 180;
 constexpr uint32_t SERVO_PHASE_MS = 700;
 constexpr uint32_t PIR_WARMUP_MS = 60000;
-constexpr uint32_t AUTO_COOLDOWN_MS = 60000;
+constexpr uint32_t AUTO_COOLDOWN_MS = 5000; // Intervalo reducido para pruebas.
 constexpr uint32_t REPORT_MS = 15000;
 constexpr uint32_t RETRY_MS = 5000;
 

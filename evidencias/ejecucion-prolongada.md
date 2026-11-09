@@ -54,3 +54,9 @@ Conservar después el archivo serie original, fecha de captura, versión cargada
 ## Pulsos muestreados
 
 [pir-pulsos.csv](pir-pulsos.csv) contiene las nueve parejas HIGH/LOW. Tras calentamiento, las ocho duraciones observadas van de 1277 a 2729 ms. Son diferencias entre muestras del loop, no mediciones electricas precisas ni duraciones del servo. No permiten clasificar aciertos o errores sin movimiento de referencia.
+
+## Cambio posterior para pruebas
+
+Despues de EP01 se redujo AUTO_COOLDOWN_MS de 60000 a 5000 ms. Los resultados anteriores conservan su interpretacion con 60 s; no validan el nuevo intervalo. Repetir P11 con flancos antes y despues de 5 s desde el inicio del ultimo ciclo. El calentamiento inicial del PIR sigue en 60 s.
+
+Actualizacion posterior: se integro test-led (e3e08a1) en main. El firmware local ahora incluye el LED de estado y los mensajes de angulo descritos en EP01. La diferencia de codigo indicada en el analisis corresponde al momento de incorporacion de la evidencia; la coincidencia de mensajes no identifica por si sola el binario original ensayado. Se reaplico el intervalo de pruebas de 5 s.

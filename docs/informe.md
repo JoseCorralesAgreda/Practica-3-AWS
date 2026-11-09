@@ -8,7 +8,7 @@ Este documento describe la implementación existente. Los resultados de nube y h
 
 ## 1. Caso de uso y requerimientos
 
-Se construye la base de un ambientador que puede accionar un pulsador mediante un SG90 y detectar movimiento con un PIR HC-SR501. El usuario puede activar un ciclo desde Alexa y consultar sensor, motor y modo. La extensión automática permite activar al detectar un nuevo movimiento, con una separación mínima de 60 s, para evitar dispensaciones continuas mientras la salida PIR permanece alta.
+Se construye la base de un ambientador que puede accionar un pulsador mediante un SG90 y detectar movimiento con un PIR HC-SR501. El usuario puede activar un ciclo desde Alexa y consultar sensor, motor y modo. La extensión automática permite activar al detectar un nuevo movimiento, con una separación mínima de 5 s (configuración de pruebas), para evitar dispensaciones continuas mientras la salida PIR permanece alta.
 
 El PIR es apropiado para eventos de movimiento de personas en interiores; no mide distancia ni confirma ocupación inmóvil. El SG90 permite una acción mecánica de baja tensión con retorno al reposo. El prototipo no mide dosis, presión aplicada, cantidad de perfume ni posición física del eje. Primero se demuestra el movimiento sin acoplar un aerosol real; una aplicación final requiere calibración mecánica y validación del dispensador.
 
@@ -245,7 +245,7 @@ Existe una ventana entre persistir y mover: un corte de energía allí puede omi
 
 Lambda admite una activación pendiente; si desired y reported difieren, pide esperar. No hay cola. `version` en UpdateThingShadow detecta escrituras concurrentes sobre un Shadow existente y se reintenta hasta tres veces. Conviene inicializar el Shadow antes del uso: crear un Shadow inexistente no tiene una versión previa para bloqueo optimista, por lo que no se garantiza exclusión de dos primeras creaciones simultáneas.
 
-Si el servo recibe un comando mientras está ocupado, permanece pendiente en desired; al acabar consulta el Shadow. Las activaciones automáticas requieren sincronización y MQTT conectado; se suspenden al perder conexión. Desactivar modo automático deja finalizar el ciclo ya iniciado. El modo manual no usa el enfriamiento de 60 s, pero impide superponer ciclos.
+Si el servo recibe un comando mientras está ocupado, permanece pendiente en desired; al acabar consulta el Shadow. Las activaciones automáticas requieren sincronización y MQTT conectado; se suspenden al perder conexión. Desactivar modo automático deja finalizar el ciclo ya iniciado. El modo manual no usa el enfriamiento de 5 s, pero impide superponer ciclos.
 
 ### Vinculación y modelo de datos
 
