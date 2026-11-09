@@ -39,6 +39,6 @@ No sobrescribir un `secrets.h` ya configurado. La plantilla permite compilar per
 
 ## Estado de entrega
 
-Implementación local y pruebas del backend disponibles. Placa confirmada: DOIT ESP32 DEVKIT V1 (`esp32doit-devkit-v1`). Región `us-east-2`, cuenta, endpoint IoT ATS e ID de skill configurados con los datos proporcionados. Lambda confirmada: `Alexa`, ARN `arn:aws:lambda:us-east-2:443972183454:function:Alexa`; permiso de logs completado para esta función. No se ha desplegado en AWS ni medido el circuito físico. Consultar [pruebas](docs/pruebas.md) para separar resultados locales de validaciones pendientes.
+Implementación local y pruebas del backend disponibles. Placa confirmada: DOIT ESP32 DEVKIT V1 (`esp32doit-devkit-v1`). Región `us-east-2`, cuenta, endpoint IoT ATS e ID de skill configurados con los datos proporcionados. Lambda confirmada: `Alexa`, ARN `arn:aws:lambda:us-east-2:679937333206:function:Alexa`; permiso de logs completado para esta función. Infraestructura desplegada en AWS y vinculación Lambda–DynamoDB verificada. Alexa y circuito físico pendientes; consultar [estado y pasos de conexión](docs/despliegue-aws.md). Consultar [pruebas](docs/pruebas.md) para separar resultados locales de validaciones pendientes.
 
 El informe contiene campos pendientes de evidencia real, integrantes, fotografías y resultados. No debe entregarse como si las pruebas de hardware y nube ya hubieran sido realizadas. Cada integrante debe hacer sus propios commits; la publicación en GitHub y el envío del enlace al LMS corresponden al grupo.

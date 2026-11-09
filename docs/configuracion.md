@@ -2,21 +2,21 @@
 
 ## 1. Datos y decisiones pendientes
 
-Datos confirmados por el usuario:
+Estado del despliegue y pendientes: [despliegue AWS](despliegue-aws.md). Cuenta y endpoint verificados mediante AWS CLI; el ID de Alexa es heredado y requiere verificación en Developer Console:
 
 | Dato | Valor |
 |---|---|
 | Placa PlatformIO | `esp32doit-devkit-v1` (DOIT ESP32 DEVKIT V1) |
 | Región indicada | `us-east-2` |
-| Cuenta AWS | `443972183454` |
-| Thing ARN | `arn:aws:iot:us-east-2:443972183454:thing/thing` |
-| Endpoint IoT ATS | `a2krhgw96q3m1o-ats.iot.us-east-2.amazonaws.com` |
+| Cuenta AWS | `679937333206` |
+| Thing ARN | `arn:aws:iot:us-east-2:679937333206:thing/thing` |
+| Endpoint IoT ATS | `aojxz8ie0n16v-ats.iot.us-east-2.amazonaws.com` |
 | ID de skill | `amzn1.ask.skill.8f29b895-fb91-4340-9bad-077860e12778` |
 | Tabla propuesta | `AmbientadorVinculaciones` |
 | Función Lambda | `Alexa` |
-| ARN de Lambda | `arn:aws:lambda:us-east-2:443972183454:function:Alexa` |
+| ARN de Lambda | `arn:aws:lambda:us-east-2:679937333206:function:Alexa` |
 
-El ARN confirma que Lambda e IoT están en `us-east-2`, cuenta `443972183454`. Crear la tabla DynamoDB en esa misma región. La política del rol ya incluye el grupo de logs `/aws/lambda/Alexa`. Calibrar los ángulos del SG90 y confirmar aceptación académica del automático. WiFi, certificado y clave privada se completan localmente en `secrets.h`; no enviarlos por chat.
+El ARN confirma que Lambda e IoT están en `us-east-2`, cuenta `679937333206`. Crear la tabla DynamoDB en esa misma región. La política del rol ya incluye el grupo de logs `/aws/lambda/Alexa`. Calibrar los ángulos del SG90 y confirmar aceptación académica del automático. WiFi, certificado y clave privada se completan localmente en `secrets.h`; no enviarlos por chat.
 
 IoT y Lambda pueden tener regiones diferentes: `IOT_REGION` selecciona IoT; DynamoDB está en la región de Lambda. La documentación actual de Alexa admite US East (Ohio), `us-east-2`, para Lambda de skills Custom: no es necesario trasladar la función únicamente por esa región. Ver [regiones admitidas por Alexa](https://developer.amazon.com/en-US/docs/alexa/custom-skills/host-a-custom-skill-as-an-aws-lambda-function.html).
 
@@ -75,7 +75,7 @@ No se impone exclusividad de propietario: dos usuarios pueden vincular el mismo 
 1. Usar runtime Python 3.12 o 3.13 y handler `lambda_function.lambda_handler`. El archivo [lambda_function.py](../backend/lambda_function.py) va en la raíz del editor o ZIP. Boto3 está disponible en el runtime; las dependencias locales sirven para las pruebas.
 2. Configurar 128 MB y timeout 8 s como punto inicial; medir latencia y ajustar si hiciera falta. No incorporar la Lambda a una VPC sin salida a los servicios AWS.
 3. Aplicar las cuatro variables ya completadas de [environment.example.json](../backend/environment.example.json). `IOT_REGION` puede diferir de la región de Lambda; la tabla permanece en esta última.
-4. Adjuntar al rol la política [lambda-role-policy.template.json](../infra/lambda-role-policy.template.json) ya completada para la cuenta `443972183454`, región `us-east-2` y función `Alexa`. El trust policy está en [lambda-trust-policy.json](../infra/lambda-trust-policy.json). La lista de recursos IoT autoriza `thing` y `ambientador-dos` para la demostración; agregar explícitamente los Things admitidos. El código no tiene un Thing fijo.
+4. Adjuntar al rol la política [lambda-role-policy.template.json](../infra/lambda-role-policy.template.json) ya completada para la cuenta `679937333206`, región `us-east-2` y función `Alexa`. El trust policy está en [lambda-trust-policy.json](../infra/lambda-trust-policy.json). La lista de recursos IoT autoriza `thing` y `ambientador-dos` para la demostración; agregar explícitamente los Things admitidos. El código no tiene un Thing fijo.
 5. Configurar el disparador **Alexa Skills Kit**, habilitando verificación del ID exacto de skill. Ese ID debe coincidir con `ALEXA_SKILL_ID`. El código valida además `context.System.application.applicationId` antes de acceder a datos.
 6. Guardar y desplegar el código. Revisar CloudWatch ante fallos; no registrar eventos completos de Alexa ni secretos.
 
@@ -90,7 +90,7 @@ La función solo necesita DescribeThing, GetThingShadow, UpdateThingShadow, GetI
 ## 6. Alexa Developer Console
 
 1. Crear skill **Custom**, idioma **Español (ES)** y backend propio. Importar [interaction-model.es-ES.json](../alexa/interaction-model.es-ES.json) en JSON Editor. Guardar y Build Model.
-2. Configurar Endpoint → AWS Lambda ARN → Default Region con `arn:aws:lambda:us-east-2:443972183454:function:Alexa`. En la función `Alexa`, comprobar el disparador Alexa Skills Kit con verificación habilitada para `amzn1.ask.skill.8f29b895-fb91-4340-9bad-077860e12778`. Si existen endpoints geográficos adicionales, revisar que no dirijan las pruebas a otra función.
+2. Configurar Endpoint → AWS Lambda ARN → Default Region con `arn:aws:lambda:us-east-2:679937333206:function:Alexa`. En la función `Alexa`, comprobar el disparador Alexa Skills Kit con verificación habilitada para `amzn1.ask.skill.8f29b895-fb91-4340-9bad-077860e12778`. Si existen endpoints geográficos adicionales, revisar que no dirijan las pruebas a otra función.
 3. Poner Test en Development y usar el simulador es-ES. No hace falta publicar la skill para la práctica.
 4. «Alexa, abre ambientador inteligente». Dentro de la sesión: «vincula mi ambientador con thing», «activa el ambientador», «activa el modo automático» y «desactiva el modo automático».
 5. Fuera de sesión, usar una invocación completa como «Alexa, dile a ambientador inteligente que active el ambientador» y comprobar cómo la reconoce el simulador. La frase global «Alexa, activa el ambientador» no está garantizada por una skill Custom sin invocación; no es una skill Smart Home.

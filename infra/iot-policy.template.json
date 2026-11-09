@@ -1,24 +1,24 @@
 {
   "Version": "2012-10-17",
   "Statement": [
-    {"Effect": "Allow", "Action": "iot:Connect", "Resource": "arn:aws:iot:us-east-2:443972183454:client/thing"},
+    {"Effect": "Allow", "Action": "iot:Connect", "Resource": "arn:aws:iot:us-east-2:679937333206:client/thing"},
     {"Effect": "Allow", "Action": "iot:Publish", "Resource": [
-      "arn:aws:iot:us-east-2:443972183454:topic/$aws/things/thing/shadow/get",
-      "arn:aws:iot:us-east-2:443972183454:topic/$aws/things/thing/shadow/update"
+      "arn:aws:iot:us-east-2:679937333206:topic/$aws/things/thing/shadow/get",
+      "arn:aws:iot:us-east-2:679937333206:topic/$aws/things/thing/shadow/update"
     ]},
     {"Effect": "Allow", "Action": "iot:Subscribe", "Resource": [
-      "arn:aws:iot:us-east-2:443972183454:topicfilter/$aws/things/thing/shadow/get/accepted",
-      "arn:aws:iot:us-east-2:443972183454:topicfilter/$aws/things/thing/shadow/get/rejected",
-      "arn:aws:iot:us-east-2:443972183454:topicfilter/$aws/things/thing/shadow/update/delta",
-      "arn:aws:iot:us-east-2:443972183454:topicfilter/$aws/things/thing/shadow/update/accepted",
-      "arn:aws:iot:us-east-2:443972183454:topicfilter/$aws/things/thing/shadow/update/rejected"
+      "arn:aws:iot:us-east-2:679937333206:topicfilter/$aws/things/thing/shadow/get/accepted",
+      "arn:aws:iot:us-east-2:679937333206:topicfilter/$aws/things/thing/shadow/get/rejected",
+      "arn:aws:iot:us-east-2:679937333206:topicfilter/$aws/things/thing/shadow/update/delta",
+      "arn:aws:iot:us-east-2:679937333206:topicfilter/$aws/things/thing/shadow/update/accepted",
+      "arn:aws:iot:us-east-2:679937333206:topicfilter/$aws/things/thing/shadow/update/rejected"
     ]},
     {"Effect": "Allow", "Action": "iot:Receive", "Resource": [
-      "arn:aws:iot:us-east-2:443972183454:topic/$aws/things/thing/shadow/get/accepted",
-      "arn:aws:iot:us-east-2:443972183454:topic/$aws/things/thing/shadow/get/rejected",
-      "arn:aws:iot:us-east-2:443972183454:topic/$aws/things/thing/shadow/update/delta",
-      "arn:aws:iot:us-east-2:443972183454:topic/$aws/things/thing/shadow/update/accepted",
-      "arn:aws:iot:us-east-2:443972183454:topic/$aws/things/thing/shadow/update/rejected"
+      "arn:aws:iot:us-east-2:679937333206:topic/$aws/things/thing/shadow/get/accepted",
+      "arn:aws:iot:us-east-2:679937333206:topic/$aws/things/thing/shadow/get/rejected",
+      "arn:aws:iot:us-east-2:679937333206:topic/$aws/things/thing/shadow/update/delta",
+      "arn:aws:iot:us-east-2:679937333206:topic/$aws/things/thing/shadow/update/accepted",
+      "arn:aws:iot:us-east-2:679937333206:topic/$aws/things/thing/shadow/update/rejected"
     ]}
   ]
 }

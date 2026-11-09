@@ -3,7 +3,7 @@
 constexpr char WIFI_SSID[] = "REEMPLAZAR";
 constexpr char WIFI_PASSWORD[] = "REEMPLAZAR";
 constexpr char THING_NAME[] = "thing";
-constexpr char IOT_ENDPOINT[] = "a2krhgw96q3m1o-ats.iot.us-east-2.amazonaws.com";
+constexpr char IOT_ENDPOINT[] = "aojxz8ie0n16v-ats.iot.us-east-2.amazonaws.com";
 constexpr char ROOT_CA[] = R"PEM(
 -----BEGIN CERTIFICATE-----
 REEMPLAZAR_CON_AMAZON_ROOT_CA_1
