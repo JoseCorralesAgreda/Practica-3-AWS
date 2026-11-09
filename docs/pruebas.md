@@ -2,7 +2,7 @@
 
 ## Alcance y preparación
 
-Verificar RF1–RF9, extensión automática, requisitos no funcionales y restricciones del montaje. Las pruebas locales no reemplazan las de integración. Estado inicial de todos los ensayos físicos: **PENDIENTE**.
+Verificar RF1–RF9, extensión automática, requisitos no funcionales y restricciones del montaje. Las pruebas locales no reemplazan las de integración. Estado previo a EP01 de todos los ensayos físicos: **PENDIENTE**.
 
 Material: ESP32 y circuito revisado, regla/cinta para marcar 1–3 m, fuente y multímetro, cámara que registre simulador y servo en una misma toma, PC con Alexa Developer Console, IoT MQTT Test Client y logs Lambda. Para medir el flanco eléctrico del PIR usar analizador lógico u osciloscopio con referencia temporal alineada al registro de recepción; si no se dispone, declarar la limitación y no afirmar que la latencia eléctrica fue medida con precisión.
 
@@ -86,3 +86,11 @@ Usar [resultados.csv](../evidencias/resultados.csv), [latencias.csv](../evidenci
 El proyecto integrado estará validado cuando RF1–RF9, restricciones y umbrales declarados tengan resultado aprobado con evidencia; los fallos abiertos deben explicarse. Confirmar la excepción académica del automático. La demo debe incluir cambios de vínculo y no limitarse a un Thing fijo. Fotografías y aportes reales por integrante forman parte de la entrega.
 
 Actualización con placa confirmada: compilación **SUCCESS** para `esp32doit-devkit-v1`, 30,50 s, RAM 46 556 bytes y flash 929 425 bytes. Región, cuenta, endpoint e ID de skill incorporados; las pruebas de integración continúan pendientes. Ver [registro local](../evidencias/verificacion-local.txt).
+
+## Evidencia de ejecucion prolongada EP01 (incorporada 2026-11-09)
+
+El registro serie aportado por el usuario abarca 16 min 50,079 s desde arranque: 11 ciclos iniciados y terminados declarados, ocho tras calentamiento. Desde la primera muestra lista hasta la ultima hay 15 min 42,995 s sin reinicios visibles. N01 queda PARCIAL: faltan diez ciclos tras calentamiento, consultas por minuto, alternancia de modo y uptimeSeconds.
+
+Siete HIGH listos coinciden con inicio de ciclo; otro HIGH a 431618 ms no activa, solo 14,727 s despues del ciclo anterior, compatible con cooldown. Hay conexion MQTT y confirmaciones repetidas de reported aceptado. P01/P02/P03/P11/N04 reciben evidencia parcial. No hay referencia fisica para exactitud, tiempos de solicitud/movimiento para latencia ni timestamps de accepted para frecuencia de nube. No se valida Alexa, recuperacion o posicion mecanica.
+
+La fecha de ejecucion y el binario no fueron informados. Los mensajes de angulo/LED no existen en el firmware local: identificar la version cargada y revisar la restriccion P16 sobre LED funcional. Ver [analisis, cobertura y limites](../evidencias/ejecucion-prolongada.md) y sus CSV. No se cambiaron los criterios originales ni el firmware.

@@ -1,0 +1,12 @@
+registro,ciclo,inicio_ms,intervalo_inicio_anterior_ms,tras_calentamiento,high_listo_coincidente,angulo_presion_ordenado,angulo_retorno_ordenado,fin_declarado,causa_confirmada,evidencia
+EP01,1,18405,,0,0,180,0,1,no,ejecucion-prolongada.md
+EP01,2,34352,15947,0,0,180,0,1,no,ejecucion-prolongada.md
+EP01,3,51262,16910,0,0,180,0,1,no,ejecucion-prolongada.md
+EP01,4,155028,103766,1,1,180,0,1,no,ejecucion-prolongada.md
+EP01,5,233435,78407,1,1,180,0,1,no,ejecucion-prolongada.md
+EP01,6,257780,24345,1,0,180,0,1,no,ejecucion-prolongada.md
+EP01,7,329602,71822,1,1,180,0,1,no,ejecucion-prolongada.md
+EP01,8,416891,87289,1,1,180,0,1,no,ejecucion-prolongada.md
+EP01,9,570348,153457,1,1,180,0,1,no,ejecucion-prolongada.md
+EP01,10,689916,119568,1,1,180,0,1,no,ejecucion-prolongada.md
+EP01,11,992624,302708,1,1,180,0,1,no,ejecucion-prolongada.md

@@ -1,1 +1,12 @@
 id,fecha_utc,operador,version,condiciones,esperado,observado,resultado,evidencia,observaciones
+P01,,,,EP01; log aportado por usuario,Calentamiento y captura PIR,HIGH/LOW; primero listo=1 a 67084 ms,PARCIAL,ejecucion-prolongada.md,Fecha de ejecucion y binario no informados; incorporado 2026-11-09
+P02,,,,EP01; log aportado por usuario,Reportes sensor/actuador y umbrales,Confirmaciones reported sin JSON ni timestamps,PARCIAL,ejecucion-prolongada.md,Fecha de ejecucion y binario no informados; incorporado 2026-11-09
+P03,,,,EP01; log aportado por usuario,Orden Alexa y convergencia,11 ciclos declarados; origen sin traza,PARCIAL,ejecucion-prolongada.md,Fecha de ejecucion y binario no informados; incorporado 2026-11-09
+P11,,,,EP01; log aportado por usuario,Flanco elegible y cooldown,7 HIGH coinciden con ciclo; HIGH a 431618 ms sin ciclo,PARCIAL,ejecucion-prolongada.md,Fecha de ejecucion y binario no informados; incorporado 2026-11-09
+P16,,,,EP01; log aportado por usuario,Circuito y ausencia de LED funcional,Log menciona LED; inspeccion pendiente,PENDIENTE,ejecucion-prolongada.md,Fecha de ejecucion y binario no informados; incorporado 2026-11-09
+N01,,,,EP01; log aportado por usuario,15 min tras calentamiento; 10 ciclos y consultas,942995 ms desde primera muestra lista; 8 ciclos posteriores; sin reinicio visible,PARCIAL,ejecucion-prolongada.md,Fecha de ejecucion y binario no informados; incorporado 2026-11-09
+N02,,,,EP01; log aportado por usuario,40 ensayos con referencia fisica,Sin referencia ni distancias; exactitud no calculable,PENDIENTE,ejecucion-prolongada.md,Fecha de ejecucion y binario no informados; incorporado 2026-11-09
+N03,,,,EP01; log aportado por usuario,20 latencias solicitud a movimiento,Faltan timestamps solicitud y movimiento,PENDIENTE,ejecucion-prolongada.md,Fecha de ejecucion y binario no informados; incorporado 2026-11-09
+N04,,,,EP01; log aportado por usuario,Intervalos accepted y latencia OUT a nube,Aceptaciones repetidas sin timestamps,PARCIAL,ejecucion-prolongada.md,Fecha de ejecucion y binario no informados; incorporado 2026-11-09
+N05,,,,EP01; log aportado por usuario,Tres cortes de red y recuperacion,No hay cortes controlados documentados,PENDIENTE,ejecucion-prolongada.md,Fecha de ejecucion y binario no informados; incorporado 2026-11-09
+N06,,,,EP01; log aportado por usuario,Corte de energia y deduplicacion,No hay cortes controlados documentados,PENDIENTE,ejecucion-prolongada.md,Fecha de ejecucion y binario no informados; incorporado 2026-11-09

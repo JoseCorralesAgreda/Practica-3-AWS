@@ -295,7 +295,7 @@ Las credenciales WiFi, certificados y clave están excluidos con `.gitignore`. L
 
 [Plan y procedimientos completos](pruebas.md). Se ejecutaron 22 pruebas unitarias del backend sin AWS real y una compilación PlatformIO con plantilla sin secretos. No equivalen a validar reconocimiento de Alexa, permisos en la cuenta, comunicaciones reales ni comportamiento mecánico.
 
-Los ensayos físicos, multiusuario con cuentas reales, estabilidad, exactitud, tiempos de respuesta y recuperación permanecen pendientes. Registrar resultados, errores y correcciones en `evidencias/` y actualizar esta sección con enlaces verificables.
+La evidencia serie EP01 aporta resultados parciales de sensor, ciclos y comunicacion. Multiusuario, exactitud, latencias y recuperacion siguen pendientes. Ver el detalle EP01 al final y el [registro analizado](../evidencias/ejecucion-prolongada.md).
 
 ## 5. Resultados
 
@@ -305,8 +305,8 @@ Los ensayos físicos, multiusuario con cuentas reales, estabilidad, exactitud, t
 | Firmware ESP32 | Compilación correcta, placa confirmada esp32doit-devkit-v1 con espressif32 6.9.0 |
 | RAM estática estimada por compilador | 46 556 / 327 680 bytes (14,2 %); no mide pico de heap TLS |
 | Flash | 929 425 / 1 310 720 bytes (70,9 %) con placa confirmada |
-| AWS/Alexa real | Pendiente |
-| Precisión PIR y estabilidad | Pendiente |
+| AWS/Alexa real | EP01: MQTT y reported aceptado segun serie; Alexa pendiente |
+| Precisión PIR y estabilidad | Exactitud pendiente; N01 parcial: 11 ciclos totales, ocho tras calentamiento |
 | Latencia y reconexión | Pendiente |
 | Dosificación real | Fuera del alcance de esta base; requiere mecanismo calibrado |
 
@@ -340,3 +340,11 @@ Tras validar la práctica, ajustar frecuencia según costo y fiabilidad observad
 - [ESP32Servo: biblioteca](https://github.com/madhephaestus/ESP32Servo).
 - [Alexa: invocación de skills Custom](https://developer.amazon.com/en-US/docs/alexa/custom-skills/understanding-how-users-invoke-custom-skills.html).
 - [Adafruit: comportamiento y estabilización de PIR](https://learn.adafruit.com/pir-passive-infrared-proximity-motion-sensor?view=all).
+
+## Evidencia de ejecucion prolongada EP01 (incorporada 2026-11-09)
+
+El registro serie aportado por el usuario abarca 16 min 50,079 s desde arranque: 11 ciclos iniciados y terminados declarados, ocho tras calentamiento. Desde la primera muestra lista hasta la ultima hay 15 min 42,995 s sin reinicios visibles. N01 queda PARCIAL: faltan diez ciclos tras calentamiento, consultas por minuto, alternancia de modo y uptimeSeconds.
+
+Siete HIGH listos coinciden con inicio de ciclo; otro HIGH a 431618 ms no activa, solo 14,727 s despues del ciclo anterior, compatible con cooldown. Hay conexion MQTT y confirmaciones repetidas de reported aceptado. P01/P02/P03/P11/N04 reciben evidencia parcial. No hay referencia fisica para exactitud, tiempos de solicitud/movimiento para latencia ni timestamps de accepted para frecuencia de nube. No se valida Alexa, recuperacion o posicion mecanica.
+
+La fecha de ejecucion y el binario no fueron informados. Los mensajes de angulo/LED no existen en el firmware local: identificar la version cargada y revisar la restriccion P16 sobre LED funcional. Ver [analisis, cobertura y limites](../evidencias/ejecucion-prolongada.md) y sus CSV. No se cambiaron los criterios originales ni el firmware.
