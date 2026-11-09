@@ -24,12 +24,15 @@ class Ambientador {
   bool automatic = false;
   bool presence = false;
   bool pirReady = false;
+  bool pirRaw = false;
+  bool pirRawInitialized = false;
   bool synchronized = false;
   bool dirty = true;
   bool activatedBefore = false;
   uint32_t lastConnect = 0;
   uint32_t lastGet = 0;
   uint32_t lastReport = 0;
+  uint32_t lastPirLog = 0;
   uint32_t lastPublish = 0;
   uint32_t phaseStarted = 0;
   uint32_t lastCycle = 0;

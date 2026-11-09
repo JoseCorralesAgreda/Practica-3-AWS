@@ -161,14 +161,25 @@ void Ambientador::applyDesired(JsonVariantConst desired) {
   }
 
 void Ambientador::updateSensor(uint32_t now) {
+    // Diagnostico sin filtrar: registrar el nivel observado incluso al arrancar.
+    // Son muestras del loop, no una captura de todos los pulsos electricos.
+    bool reading = digitalRead(PIR_PIN) == HIGH;
+    if (!pirRawInitialized || reading != pirRaw || now - lastPirLog >= REPORT_MS) {
+      Serial.printf("PIR t=%lu ms GPIO%d=%s listo=%d servo=%s automatico=%d\n",
+                    static_cast<unsigned long>(now), PIR_PIN, reading ? "HIGH" : "LOW",
+                    (pirReady || now >= PIR_WARMUP_MS) ? 1 : 0,
+                    phase.c_str(), automatic ? 1 : 0);
+      lastPirLog = now;
+    }
+    pirRawInitialized = true;
+    pirRaw = reading;
     if (!pirReady && now >= PIR_WARMUP_MS) {
       pirReady = true;
       // No considerar el nivel inicial como un flanco de detección nuevo.
-      presence = digitalRead(PIR_PIN) == HIGH;
+      presence = reading;
       dirty = true;
     }
     if (!pirReady) return;
-    bool reading = digitalRead(PIR_PIN) == HIGH;
     if (reading == presence) return;
     presence = reading;
     dirty = true;
