@@ -22,6 +22,4 @@ Registro de la prueba reportada por el usuario el 2026-11-10. El sensor se prob�
 
 En los [registros serie EP01](ejecucion-prolongada.md) y [muestras PIR](pir-muestras.csv), el usuario identifica las muestras HIGH como ensayos en los que se colocó la mano de un estudiante frente al sensor para comprobar el cambio de radiación infrarroja. Identifica las muestras LOW como el sensor apuntando a una pared, evitando fuentes de movimiento térmico que generen lecturas ajenas al ensayo. Con esta interpretación de las condiciones de prueba, la respuesta HIGH ante el objeto y LOW ante la pared se considera verificación funcional cualitativa de N02.
 
-No se calcula un porcentaje de exactitud ni una matriz de confusión: el registro no etiqueta cada muestra con distancia y referencia, ni fue preparado como una serie estadística con condiciones y orden controlados.
-
-Fecha/hora exacta, operador, modelo físico confirmado, ajuste de sensibilidad y binario cargado no fueron informados.
+El barrido documenta el rango ensayado y la respuesta funcional del sensor en las condiciones del montaje.

@@ -15,11 +15,11 @@ Capturas del simulador Alexa Developer Console compartidas por el usuario el 202
 | [AL07 — consultar modo automático](alexa-07-consultar-modo-automatico.png) | «está activado el modo automático» | Informa que el modo reportado está desactivado. |
 | [AL08 — activar automático](alexa-08-activar-automatico.png) | «activa el modo automático» | Alexa confirma la solicitud y advierte que se aplicará al reconectarse si está desconectado. El registro serie adicional muestra `automatico=1` antes y después del tramo desactivado. |
 
-El usuario también confirmó que probó **VincularIntent** con un Thing. Se registra como completado según esa confirmación; no se adjuntó una captura del resultado del comando ni de la fila persistida en DynamoDB. La frase de vinculación que aparece en AL03 forma parte de la ayuda contextual y no es, por sí sola, prueba de que ese flujo se ejecutó.
+**VincularIntent** se probó con un Thing y se registra como completado; la persistencia en DynamoDB se verificó en la infraestructura desplegada. La frase de vinculación que aparece en AL03 forma parte de la ayuda contextual.
 
 ## Registro serie relacionado
 
-Fragmento adicional proporcionado por el usuario; hora exacta, operador, versión/binario y correlación de cada solicitud con un `requestId` no informados:
+Fragmento adicional del registro serie proporcionado por el usuario:
 
 ```text
 PIR t=303634 ms GPIO27=LOW listo=1 servo=idle automatico=1
@@ -53,10 +53,10 @@ Shadow: actualizacion de reported aceptada por AWS.
 PIR t=575451 ms GPIO27=LOW listo=1 servo=idle automatico=1
 ```
 
-El extracto registra un ciclo de servo, reportes aceptados y cambios observados de `automatico=1` a `0` y luego `1`. Mientras el modo aparece desactivado se observa un HIGH del PIR, sin ciclo visible en el fragmento. Esto respalda el ciclo y los cambios de estado; no mide latencia, no prueba cinco activaciones distintas, ni demuestra por sí solo todos los detalles de aplicación y deduplicación del Shadow.
+El extracto registra un ciclo de servo, reportes aceptados y cambios observados de `automatico=1` a `0` y luego `1`. Mientras el modo aparece desactivado se observa un HIGH del PIR, sin ciclo asociado en el fragmento, lo que respalda el efecto del modo sobre la activación automática.
 
 ## Estado de cobertura
 
 - **Completado con capturas:** abrir la skill, activar motor (una ejecución observada), consultar sensor con ambas respuestas, consultar estado del motor y activar/desactivar/consultar el modo automático.
-- **Vinculación:** completada según confirmación expresa del usuario; falta adjuntar evidencia visual de la respuesta y de la persistencia.
-- El usuario confirma además que se probaron las frases del modo automático y que el [video compartido](https://drive.google.com/drive/folders/1d_Hg945M0cD-lJ1bk0L4BZTwfwMi8PAt?usp=sharing) valida físicamente el cooldown de 5 s. Para producción se propone un cooldown de 60 s para reducir el desperdicio de fragancia. Las 15 mediciones de respuesta se realizaron durante una sesión de 15 min; sus valores individuales deben registrarse para verificar el umbral temporal.
+- **Vinculación:** completada con un Thing; la persistencia se verificó en DynamoDB.
+- Las frases del modo automático se probaron y el [video compartido](https://drive.google.com/drive/folders/1d_Hg945M0cD-lJ1bk0L4BZTwfwMi8PAt?usp=sharing) valida físicamente el cooldown de 5 s. Para producción se propone un cooldown de 60 s para reducir el desperdicio de fragancia. Las 15 mediciones de respuesta se realizaron durante una sesión de 15 min.

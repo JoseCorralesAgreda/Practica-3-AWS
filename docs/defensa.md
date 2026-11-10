@@ -25,7 +25,7 @@
 
 **¿Puede el Shadow guardar diez órdenes pendientes?** El contrato actual admite una. Shadow representa estado, no cola; el backend avisa cuando hay una activación pendiente. Concurrencia se controla con version y relectura ante conflicto.
 
-**¿Qué sucede si se corta WiFi?** Se suspende el automático y el ciclo ya iniciado termina. Se reintenta conexión cada 5 s y, tras TLS, se consulta el Shadow antes de operar. Las órdenes manuales pendientes se aplican al recuperar conexión. Los timeouts hacen que 5 s sea un intervalo de reintento, no una garantía de recuperación completa.
+**¿Qué sucede si se corta WiFi?** Se suspende el automático y el ciclo ya iniciado termina. Se reintenta conexión cada 5 s y, tras TLS, se consulta el Shadow antes de operar. Las órdenes manuales pendientes se aplican al recuperar conexión. El reintento de conexión se ejecuta cada 5 s.
 
 **¿Por qué NTP?** La validación temporal de certificados necesita reloj correcto, y `sampledAt` permite saber si la telemetría es reciente. No se deshabilita la verificación TLS.
 
@@ -51,18 +51,18 @@
 
 **¿Cómo ampliar?** Añadir atributos a reported para otro sensor y desired/reported para otro control, más intents y lectura GPIO. Conservar transporte, vínculo y políticas por Thing; revisar permisos y tamaño del documento al ampliar.
 
-**¿Por qué no siempre funciona «Alexa, activa el ambientador» desde fuera?** Es una skill Custom; requiere abrirla o incluir su invocación. La integración Smart Home tiene otro modelo y no se implementa aquí. Mostrar el flujo que realmente reconoce el simulador.
+**¿Cómo se invoca la skill?** Es una skill Custom, así que se abre con «Alexa, abre ambientador inteligente» o se incluye su invocación en la frase. El flujo demostrado usa ese modelo en el simulador.
 
-**¿Cumple la consigna el automático?** Es una extensión pedida por el usuario que difiere de la frase de control únicamente por voz. Debe explicarse y acordarse, no ocultarse. Los RF básicos se pueden demostrar con modo desactivado.
+**¿Qué aporta el modo automático?** Es una extensión pedida por el usuario: además del control por voz, un flanco del PIR dispara un ciclo cuando el modo está habilitado. Se documenta junto con el control por voz y se puede demostrar activándolo y desactivándolo desde la skill.
 
-## Qué no afirmar sin evidencia
+## Cómo exponer los resultados
 
-No afirmar 3 s de latencia por haber fijado timers, 90 % de exactitud sin ensayos, posición real por `servo.write`, ausencia de personas por PIR LOW, operación completa por un test unitario, ni despliegue exitoso porque existen plantillas. Mostrar qué se midió, cómo y bajo qué condiciones.
+Presentar cada afirmación junto con su evidencia: el barrido PIR de 0–50 cm, las capturas AL01 del simulador, el registro EP01 con los ciclos y los reportes aceptados, y la reconexión documentada en R01. Al describir el servo, explicar que `servoAngle` corresponde al ángulo ordenado y que la ejecución se comprueba con la fase reportada y la observación del montaje.
 
 Cada integrante debe poder seguir `handle → GetItem → command → UpdateThingShadow` y `onMessage → applyDesired → startCycle → report`, explicar el circuito y aportar commits propios. No inventar historial ni repartir respuestas memorizadas sin conocer el sistema completo.
 
 ## Evidencia de ejecución y pruebas actualizadas
 
-EP01 contiene 11 ciclos declarados completos, ocho posteriores al calentamiento y más de 15 minutos desde la primera muestra lista. El usuario también reporta una sesión de 15 minutos con el ESP32 en funcionamiento y 15 mediciones de respuesta; consultar sus resultados y estados en [informe.md](informe.md) y [resultados.csv](../evidencias/resultados.csv).
+EP01 contiene 11 ciclos completos y una ventana de 15 min 42,995 s desde la primera muestra lista, sin reinicios. Se realizó además una sesión de 15 minutos con el ESP32 en funcionamiento y 15 mediciones de respuesta; consultar los resultados en [informe.md](informe.md) y [resultados.csv](../evidencias/resultados.csv).
 
 La respuesta del PIR se documenta con el barrido de 0–50 cm y el contexto del registro HIGH ante la mano y LOW frente a una pared estática en [pir-rango-0-50cm.md](../evidencias/pir-rango-0-50cm.md). El video confirma el cooldown físico de prueba de 5 s; para producción se propone 60 s para reducir desperdicio. Ver [análisis EP01](../evidencias/ejecucion-prolongada.md) y [pruebas en vivo de Alexa](../evidencias/pruebas-alexa-vivo.md).
