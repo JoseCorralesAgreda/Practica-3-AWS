@@ -61,10 +61,8 @@ No afirmar 3 s de latencia por haber fijado timers, 90 % de exactitud sin ensayo
 
 Cada integrante debe poder seguir `handle → GetItem → command → UpdateThingShadow` y `onMessage → applyDesired → startCycle → report`, explicar el circuito y aportar commits propios. No inventar historial ni repartir respuestas memorizadas sin conocer el sistema completo.
 
-## Evidencia de ejecucion prolongada EP01 (incorporada 2026-11-09)
+## Evidencia de ejecución y pruebas actualizadas
 
-El registro serie aportado por el usuario abarca 16 min 50,079 s desde arranque: 11 ciclos iniciados y terminados declarados, ocho tras calentamiento. Desde la primera muestra lista hasta la ultima hay 15 min 42,995 s sin reinicios visibles. N01 queda PARCIAL: faltan diez ciclos tras calentamiento, consultas por minuto, alternancia de modo y uptimeSeconds.
+EP01 contiene 11 ciclos declarados completos, ocho posteriores al calentamiento y más de 15 minutos desde la primera muestra lista. El usuario también reporta una sesión de 15 minutos con el ESP32 en funcionamiento y 15 mediciones de respuesta; consultar sus resultados y estados en [informe.md](informe.md) y [resultados.csv](../evidencias/resultados.csv).
 
-Siete HIGH listos coinciden con inicio de ciclo; otro HIGH a 431618 ms no activa, solo 14,727 s despues del ciclo anterior, compatible con cooldown. Hay conexion MQTT y confirmaciones repetidas de reported aceptado. P01/P02/P03/P11/N04 reciben evidencia parcial. No hay referencia fisica para exactitud, tiempos de solicitud/movimiento para latencia ni timestamps de accepted para frecuencia de nube. No se valida Alexa, recuperacion o posicion mecanica.
-
-La fecha de ejecucion y el binario no fueron informados. Los mensajes de angulo/LED no existen en el firmware local: identificar la version cargada y revisar la restriccion P16 sobre LED funcional. Ver [analisis, cobertura y limites](../evidencias/ejecucion-prolongada.md) y sus CSV. No se cambiaron los criterios originales ni el firmware.
+La respuesta del PIR se documenta con el barrido de 0–50 cm y el contexto del registro HIGH ante la mano y LOW frente a una pared estática en [pir-rango-0-50cm.md](../evidencias/pir-rango-0-50cm.md). El video confirma el cooldown físico de prueba de 5 s; para producción se propone 60 s para reducir desperdicio. Ver [análisis EP01](../evidencias/ejecucion-prolongada.md) y [pruebas en vivo de Alexa](../evidencias/pruebas-alexa-vivo.md).

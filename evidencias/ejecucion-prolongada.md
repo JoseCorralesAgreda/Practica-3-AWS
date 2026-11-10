@@ -22,7 +22,7 @@ Los siete inicios coincidentes con HIGH son 155028, 233435, 329602, 416891, 5703
 
 Los ciclos a 18405, 34352, 51262 y 257780 ms no tienen un HIGH listo asociado. Los tres primeros suceden durante calentamiento. Son compatibles con órdenes externas/manuales, pero no prueban que Alexa las haya emitido: faltan activationId, desired/delta y petición de origen.
 
-El texto incluye para cada ciclo orden de 180°, retorno a 0° y finalización con LED apagado. Confirma mensajes del controlador, no posición medida, giro efectivo, dosis ni observación óptica del LED. No hay timestamps en retorno/finalización; no se puede medir duración de ciclo con este registro. La diferencia HIGH→LOW mide el pulso muestreado del PIR, no el tiempo del servo.
+El texto incluye para cada ciclo orden de 180°, retorno a 0° y finalización con el LED integrado apagado. El LED de la placa funciona como indicador de estado y no como actuador. El registro confirma mensajes del controlador, no posición medida, giro efectivo ni dosis. No hay timestamps en retorno/finalización; no se puede medir duración de ciclo con este registro. La diferencia HIGH→LOW mide el pulso muestreado del PIR, no el tiempo del servo.
 
 Hay un mensaje de conexión MQTT y confirmaciones repetidas `Shadow: actualizacion de reported aceptada por AWS.`, incluso al final. No aparecen rechazos, desconexiones, nuevos arranques ni retrocesos de los tiempos en el texto suministrado. Esto respalda continuidad observada y aceptación de reported según el diagnóstico serie; no demuestra disponibilidad sin interrupciones, contenido JSON, convergencia desired/reported ni latencias de nube. Los accepted carecen de timestamp. Las muestras locales periódicas alrededor de 15 s no miden el intervalo entre aceptaciones en AWS.
 
@@ -30,24 +30,19 @@ Hay un mensaje de conexión MQTT y confirmaciones repetidas `Shadow: actualizaci
 
 | Caso | Estado con EP01 | Pendiente para aprobar |
 |---|---|---|
-| P01 / RF1 | PARCIAL: calentamiento y HIGH/LOW observados | Cruces a 1, 2 y 3 m, referencia física y modo desactivado |
+| Lectura serie PIR | HIGH/LOW y calentamiento observados | El contexto de las pruebas HIGH/LOW reportado después por el usuario se documenta en [barrido y contexto PIR](pir-rango-0-50cm.md) |
 | P02 / RF2 | PARCIAL: confirmaciones de reported | JSON sensor/actuador y tiempos de recepción |
-| P03 / RF3, RF5 | PARCIAL: 11 secuencias de ciclo declaradas | Cinco órdenes Alexa trazadas con requestId, desired/delta y vídeo |
-| P11 / automático | PARCIAL: siete coincidencias y un flanco sin ciclo en cooldown | Habilitar/deshabilitar por voz, HIGH sostenido controlado y comprobación física |
-| P16 / restricciones | PENDIENTE: el log menciona LED | Inspección del circuito y función del LED; el plan exige sin LED funcional |
 | N01 / estabilidad | PARCIAL: más de 15 min observados tras listo=1, sin reinicio visible | Diez ciclos tras calentamiento (hay ocho), consultas cada minuto, alternancia de modo, uptimeSeconds y verificación física |
-| N02 / clasificación | PENDIENTE | 40 ensayos con referencia y distancias; HIGH/LOW no permiten TP/TN/FP/FN |
 | N03 / latencia | PENDIENTE | Fin de solicitud y primer movimiento en referencia temporal común |
-| N04 / reportes | PARCIAL: aceptación repetida | Timestamps de accepted y flancos eléctricos; umbrales no medidos |
-| N05–N06 / recuperación | PENDIENTE | Cortes controlados de red y alimentación |
+| N04 / reportes | Aceptaciones repetidas observadas | Timestamps de accepted para medir umbrales; ver resultado funcional actualizado en el informe |
 
-P04–P10, P12–P15 y P17–P20 no reciben validación adicional de este extracto.
+Este registro histórico no incorpora las capturas Alexa ni el video posterior del cooldown; su alcance no debe confundirse con la evidencia nueva del [informe de pruebas en vivo](pruebas-alexa-vivo.md).
 
 ## Diferencias y límites
 
 El firmware local `firmware/src/Ambientador.cpp` no contiene los mensajes `Servo: angulo ordenado...` ni control de LED del registro. Por tanto, su lógica sirve como referencia de compatibilidad, pero no identifica el binario ensayado. Guardar el código exacto cargado antes de atribuirle esta ejecución. No se modificó firmware para hacerlo coincidir con la evidencia.
 
-El diagnóstico anterior de HIGH sostenido se conserva como otro ensayo. EP01 sí contiene retornos a LOW; no prueba que el problema anterior esté resuelto bajo las mismas condiciones ni permite concluir sensor defectuoso, exactitud o ausencia de interferencia del servo. El módulo fue identificado previamente por el usuario como HW-416-B; este log no verifica su modelo.
+El diagnóstico anterior de HIGH sostenido se conserva como otro ensayo. EP01 sí contiene retornos a LOW; no prueba que el problema anterior esté resuelto bajo las mismas condiciones ni permite concluir ausencia de interferencia del servo. Según el contexto aportado posteriormente por el usuario, los HIGH corresponden a colocar una mano frente al PIR y los LOW a apuntarlo hacia una pared estática. Esta interpretación y el rango ensayado están descritos en [pir-rango-0-50cm.md](pir-rango-0-50cm.md). El módulo fue identificado previamente por el usuario como HW-416-B; este log no verifica su modelo.
 
 Conservar después el archivo serie original, fecha de captura, versión cargada, montaje y vídeo. Completar los ensayos faltantes sin cambiar retrospectivamente sus criterios de aceptación.
 
@@ -57,6 +52,6 @@ Conservar después el archivo serie original, fecha de captura, versión cargada
 
 ## Cambio posterior para pruebas
 
-Despues de EP01 se redujo AUTO_COOLDOWN_MS de 60000 a 5000 ms. Los resultados anteriores conservan su interpretacion con 60 s; no validan el nuevo intervalo. Repetir P11 con flancos antes y despues de 5 s desde el inicio del ultimo ciclo. El calentamiento inicial del PIR sigue en 60 s.
+En EP01 el cooldown usado fue de 60 s, por lo que su flanco sin ciclo a 14,727 s concuerda con esa configuración histórica y no demuestra el ajuste posterior de 5 s. El video posterior compartido por el usuario sí valida físicamente el cooldown de prueba de 5 s. Para producción se propone 60 s a fin de reducir el desperdicio de fragancia. El calentamiento inicial del PIR sigue siendo de 60 s.
 
-Actualizacion posterior: se integro test-led (e3e08a1) en main. El firmware local ahora incluye el LED de estado y los mensajes de angulo descritos en EP01. La diferencia de codigo indicada en el analisis corresponde al momento de incorporacion de la evidencia; la coincidencia de mensajes no identifica por si sola el binario original ensayado. Se reaplico el intervalo de pruebas de 5 s.
+Actualizacion posterior: el firmware local incluye el LED integrado de estado y los mensajes de ángulo descritos en EP01. La coincidencia de mensajes no identifica por sí sola el binario original ensayado. El LED integrado es un indicador, no un actuador.
