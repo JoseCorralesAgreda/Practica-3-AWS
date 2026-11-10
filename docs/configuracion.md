@@ -36,7 +36,7 @@ Verificar las etiquetas: el orden de pines del PIR varía entre módulos. No ali
 
 Calibrar primero sin brazo acoplado al pulsador. `REST_ANGLE`, `PRESS_ANGLE` y `SERVO_PHASE_MS` están al inicio de `main.cpp`. El intervalo PWM de 500–2400 µs es configurable y no garantiza que todos los clones SG90 admitan los extremos sin forzarse. El requisito de servo de 180° describe su capacidad; el mecanismo real puede necesitar menos recorrido.
 
-Ajustar PIR a retardo corto y anotar posición del jumper H/L y sensibilidad. Esperar 60 s desde el arranque; exigir retorno a LOW antes de una nueva prueba. Un nivel HIGH mantenido no produce ciclos sucesivos; un flanco durante el enfriamiento se descarta, no se encola.
+El usuario informa que el alcance máximo del módulo se ajusta con los potenciómetros y que su límite mínimo configurable es 300 cm; también informa un retardo ajustable entre 5 y 7 s. Registrar los ajustes del módulo y el jumper H/L para que la prueba sea reproducible; el barrido P01 cubre de 0 a 50 cm. Esperar 60 s desde el arranque; exigir retorno a LOW antes de una nueva prueba. El retardo propio del PIR no es el cooldown de 5 s del firmware: un nivel HIGH mantenido no produce ciclos sucesivos, y un flanco durante el cooldown del firmware se descarta, no se encola.
 
 ## 3. AWS IoT Core (Thing existente: thing)
 

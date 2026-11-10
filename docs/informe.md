@@ -47,7 +47,7 @@ La extensión automática se habilita y deshabilita por voz, arranca desactivada
 | Datos antiguos | Alexa no presenta como actuales muestras con más de 45 s o reloj inválido | Validación de `sampledAt` en cada consulta |
 | Seguridad | TLS con validación de CA y certificado cliente; cero secretos versionados; ID de skill validado | `setCACert`, certificado de cliente y validación de `applicationId` |
 
-La verificación PIR es funcional: el usuario identifica los HIGH de los logs con la mano de un estudiante frente al sensor y los LOW con el sensor dirigido a una pared para evitar detecciones espurias. La tabla de P01 registra el barrido cercano de 0–50 cm. La tensión y el uso del LED integrado como simple indicador se registran según la configuración reportada y las fotografías.
+La verificación PIR es funcional: el usuario identifica los HIGH de los logs con la mano de un estudiante frente al sensor y los LOW con el sensor dirigido a una pared para evitar detecciones espurias. La tabla de P01 registra el barrido cercano de 0–50 cm. El módulo permite ajustar manualmente el alcance máximo con sus potenciómetros, con un límite mínimo configurable de 300 cm, y un retardo de 5 a 7 s; estos valores corresponden al ajuste del módulo y se distinguen del cooldown de firmware. La tensión y el uso del LED integrado como simple indicador se registran según la configuración reportada y las fotografías.
 
 ## 2. Análisis y diseño
 
@@ -317,7 +317,7 @@ El [plan y los procedimientos](pruebas.md) definen los casos. La [carpeta de evi
 
 ### Detalle del barrido P01
 
-Se probó el PIR desde 0 hasta 50 cm, avanzando 5 cm en cada ensayo. En todas las posiciones reportadas se detectó el objeto y la salida se puso en HIGH.
+Se probó el PIR desde 0 hasta 50 cm, avanzando 5 cm en cada ensayo. En todas las posiciones reportadas se detectó el objeto y la salida se puso en HIGH. Según el usuario, el módulo permite ajustar manualmente con sus potenciómetros el alcance máximo, cuyo límite mínimo configurable es 300 cm, y un retardo entre 5 y 7 s. P01 registra el barrido realizado de 0–50 cm.
 
 | Distancia | Salida PIR | Resultado |
 |---:|:---:|---|
