@@ -1,8 +1,10 @@
-# Base del informe técnico — Ambientador inteligente
+# Informe técnico — Ambientador inteligente
 
 **Asignatura:** SIS-234. **Práctica:** 3. **Fecha de preparación:** 8 de noviembre de 2026.
 
 **Integrantes y aportes:** pendiente de completar con nombres y commits reales.
+
+**Revisión contra la rúbrica:** 10 de noviembre de 2026. El cumplimiento integral aún no está acreditado. La [matriz de revisión y acciones de cierre](revision-rubrica.md) identifica lo cubierto y especifica las evidencias que debe aportar el grupo.
 
 Este documento describe la implementación existente. Los resultados de nube y hardware aún no medidos están identificados como pendientes. Debe completarse con las evidencias del [plan de pruebas](pruebas.md) antes de entregar.
 
@@ -12,7 +14,7 @@ Se construye la base de un ambientador que puede accionar un pulsador mediante u
 
 El PIR es apropiado para eventos de movimiento de personas en interiores; no mide distancia ni confirma ocupación inmóvil. El SG90 permite una acción mecánica de baja tensión con retorno al reposo. El prototipo no mide dosis, presión aplicada, cantidad de perfume ni posición física del eje. Primero se demuestra el movimiento sin acoplar un aerosol real; una aplicación final requiere calibración mecánica y validación del dispensador.
 
-**Diferencia respecto a la consigna:** el texto de la práctica limita el actuador al control por voz, mientras el solicitante requiere modo automático. Se implementa como extensión separada, desactivada por defecto y habilitada mediante desired por Alexa. Su aceptación por el docente queda por confirmar; no se presenta como una exigencia original.
+**Diferencia respecto a la consigna:** la práctica limita el actuador al control exclusivamente por voz. El código incluye una extensión automática, desactivada al arranque pero recuperable desde desired. Habilitarla por voz no convierte cada activación posterior por PIR en un comando de voz. Esta extensión no acredita cumplimiento estricto: para la entrega debe retirarse o inhabilitarse la activación por sensor y actualizar código, modelo y pruebas, o adjuntarse una autorización explícita del docente. No basta con ocultarla en el informe ni con el valor inicial false.
 
 ### Trazabilidad funcional
 
@@ -281,13 +283,17 @@ Con estado quieto: 4 publicaciones/min, 240/hora, 5760/día, 172800 en 30 días 
 
 ## 3. Desarrollo e implementación
 
-Fuentes: [main.cpp](../firmware/src/main.cpp), [lambda_function.py](../backend/lambda_function.py), [tests](../tests/test_backend.py). Las constantes del firmware concentran pines y tiempos. Las dependencias PlatformIO están fijadas para reproducibilidad con Arduino ESP32 2.x; no se actualiza ESP32Servo a una versión incompatible sin recompilar.
+Fuentes: [main.cpp](../firmware/src/main.cpp) contiene `setup` y `loop`; [Ambientador.h](../firmware/include/Ambientador.h) declara la clase y [Ambientador.cpp](../firmware/src/Ambientador.cpp) implementa conexión, sensor, servo y reportes. Las constantes de este último concentran pines y tiempos. [lambda_function.py](../backend/lambda_function.py) implementa el backend y [test_backend.py](../tests/test_backend.py) sus pruebas. Las dependencias están fijadas en [platformio.ini](../firmware/platformio.ini).
+
+El código actual enciende `LED_BUILTIN` durante el ciclo como indicador auxiliar; el actuador mecánico es el SG90. No se presenta el LED como actuador que satisfaga la práctica. El plan P16 exige además ausencia de LED funcional, condición más estricta que el texto de la consigna y que el código actual no cumple. Debe aclararse esta distinción en el registro de inspección y verificarse el montaje.
 
 Los fragmentos clave son `applyDesired` (validación, deduplicación y persistencia), `updateServo` (máquina de estados sin espera larga), `command` (escritura desired versionada) y `handle` (usuario, vinculación e intents). Se enlaza el código para evitar duplicarlo entero en el informe.
 
 Configuración AWS y Alexa paso a paso en [configuracion.md](configuracion.md). Exportaciones: [tabla](../infra/dynamodb-table.json), [política IoT](../infra/iot-policy.template.json), [rol Lambda](../infra/lambda-role-policy.template.json), [trust policy](../infra/lambda-trust-policy.json), [variables](../backend/environment.example.json), [secretos de ejemplo](../firmware/include/secrets.example.h).
 
-Las políticas propuestas aplican mínimo privilegio: cliente y tópicos específicos para la placa, lista de Things autorizados para Lambda, tres operaciones sobre una sola tabla y logs de una sola función. El permiso CreateLogGroup usa un comodín de recursos de logs en la cuenta/región; puede retirarse si el grupo se aprovisiona previamente. Las políticas realmente desplegadas deben exportarse y compararse con estas plantillas: **configuración real pendiente**.
+Las plantillas limitan `iot:Connect` al cliente `thing`, `iot:Publish` a Shadow get/update y `iot:Subscribe/Receive` a sus respuestas y delta. Lambda requiere `iot:DescribeThing`, `iot:GetThingShadow` e `iot:UpdateThingShadow` sobre `thing` y `ambientador-dos`; `dynamodb:GetItem/PutItem/DeleteItem` sobre la tabla de vínculos y permisos de escritura de logs. Así se separa el acceso del dispositivo del backend. `logs:CreateLogGroup` conserva un comodín dentro de la cuenta/región; en producción puede retirarse si el grupo está precreado. No se justifican permisos administrativos para ejecutar la skill.
+
+El [registro de despliegue del 8 de noviembre](despliegue-aws.md) documenta Thing `thing`, certificado activo asociado, política `AmbientadorThingPolicy`, DynamoDB ACTIVE, Lambda `Alexa` Python 3.13 y rol `AmbientadorLambdaRole`, en `us-east-2`, cuenta `679937333206`. Registra también una invocación directa de vinculación con escritura comprobada en DynamoDB y posterior eliminación del usuario temporal. Es evidencia documental previa, no una nueva consulta a AWS durante esta revisión. Faltan exportaciones de las políticas efectivamente asociadas para contrastarlas con las plantillas. El permiso de invocación está limitado al ID de skill consignado en configuración; su acceso, el modelo construido y el endpoint en Developer Console siguen sin evidencia.
 
 Las credenciales WiFi, certificados y clave están excluidos con `.gitignore`. La Lambda utiliza su rol y el firmware certificados; no hay access keys incorporadas. `.gitignore` no elimina secretos que ya se hubieran publicado; revisar el historial antes de entregar.
 
@@ -305,18 +311,31 @@ La evidencia serie EP01 aporta resultados parciales de sensor, ciclos y comunica
 | Firmware ESP32 | Compilación correcta, placa confirmada esp32doit-devkit-v1 con espressif32 6.9.0 |
 | RAM estática estimada por compilador | 46 556 / 327 680 bytes (14,2 %); no mide pico de heap TLS |
 | Flash | 929 425 / 1 310 720 bytes (70,9 %) con placa confirmada |
-| AWS/Alexa real | EP01: MQTT y reported aceptado segun serie; Alexa pendiente |
+| AWS real | Registro del 8/11: recursos desplegados e invocación directa de vinculación con registro DynamoDB; no prueba reconocimiento de voz |
+| MQTT / Alexa | EP01: conexión y reported aceptado según serie; integración desde simulador Alexa pendiente |
 | Precisión PIR y estabilidad | Exactitud pendiente; N01 parcial: 11 ciclos totales, ocho tras calentamiento |
 | Latencia y reconexión | Pendiente |
 | Dosificación real | Fuera del alcance de esta base; requiere mecanismo calibrado |
 
-Completar con máximos, medias, cantidad de ensayos y análisis de desviaciones. No sustituir mediciones por los valores objetivo.
+EP01 contiene 11 ciclos declarados completos, ocho posteriores al calentamiento. La ventana desde la primera muestra lista es de 942 995 ms (15 min 42,995 s), superior a los 15 min declarados, pero inferior en carga a los diez ciclos requeridos después del calentamiento. Por ello N01 permanece parcial: no puede aprobarse solo por duración. Los 22 tests son verificaciones locales de contrato, no una tasa de aprobación de los nueve RF en el sistema real.
+
+No hay datos para calcular el error PIR, la media/máximo de latencia ni los máximos de reporte y reconexión. Los resultados de compilación son históricos y no certifican el binario de EP01 ni el firmware actual. La evidencia se obtuvo con un enfriamiento de 60 s; el código actual usa 5 s, por lo que exige repetir la prueba del automático si se conserva con autorización. Estas diferencias impiden atribuir todas las observaciones a una única versión validada.
 
 ## 6. Conclusiones
 
-La implementación separa firmware y backend, representa el control mediante Shadow y permite resolver varios usuarios sin fijar el Thing en Lambda. Las pruebas locales respaldan los contratos de vinculación, consulta y actualización; la compilación respalda la compatibilidad de las dependencias seleccionadas.
+1. **Integración y separación de responsabilidades.** El diseño y el código implementan el recorrido Alexa → Lambda → Shadow → ESP32, con consultas sobre reported y comandos sobre desired. Los 22 tests locales registrados y la prueba directa de vinculación documentada en AWS respaldan partes del backend; no demuestran todavía RF1–RF9 completos desde el simulador hasta el actuador físico. El objetivo de integración está implementado, pero su validación extremo a extremo permanece incompleta.
 
-Todavía no puede concluirse que el sistema integrado cumple los umbrales físicos ni que todas las configuraciones de nube sean correctas. Esa conclusión depende de ejecutar el plan y completar las evidencias. El PIR y el servo abierto limitan lo que puede afirmarse sobre ocupación, posición y dosis real.
+2. **Vinculación persistente y extensibilidad.** Resolver `context.System.user.userId` en DynamoDB permite seleccionar el Thing por solicitud sin fijarlo en Lambda. La escritura real documentada respalda la persistencia básica; faltan sesiones distintas y dos usuarios con Things diferentes para comprobar aislamiento, cambio y eliminación. El contrato Shadow y la separación de módulos permiten incorporar sensores, atributos e intents conservando el transporte y la vinculación.
+
+3. **Estabilidad observada con alcance limitado.** EP01 registra 15 min 42,995 s desde la primera muestra lista sin reinicio visible y 11 ciclos declarados, de los cuales ocho ocurren tras calentamiento. La duración supera el objetivo de 15 min, pero faltan la carga mínima de diez ciclos posteriores, consultas periódicas y verificación física. Se concluye continuidad observada del registro, no aprobación de N01 ni estabilidad garantizada del sistema integrado.
+
+4. **Medición y respuesta aún no acreditadas.** Sin referencia física para los 40 ensayos PIR, 20 mediciones extremo a extremo, marcas temporales de accepted y tres recuperaciones de red, no es posible concluir error ≤10 %, respuesta ≤3 s, reporte por evento ≤1 s, respaldo ≤16 s o reconexión ≤30 s. Declarar esos objetivos sin medirlos no satisface por completo el criterio de pruebas de la rúbrica.
+
+5. **Límites del caso de uso.** El PIR informa movimiento y el SG90 recibe una orden de posición sin realimentación: ni presence acredita ocupación inmóvil ni servoAngle acredita posición física o dosis dispensada. El prototipo constituye una base de accionamiento y consulta remota; su uso como ambientador real exige acoplamiento, calibración y comprobación de la dispensación. La persistencia de activationId reduce repeticiones, pero un corte entre guardar y mover puede omitir un ciclo.
+
+6. **Comportamiento observado del PIR y configuración.** En ambientes abiertos, el PIR detectó adecuadamente los cambios de radiación infrarroja producidos por el movimiento. Sin embargo, cuando hay varias personas en la habitación disminuye la precisión de la detección, ya que se superponen más cambios térmicos dentro de su campo de visión. El resultado depende de forma importante de la ubicación, la orientación y el ángulo de instalación del sensor. En el montaje se dejó configurado manualmente con los parámetros mínimos disponibles: una sensibilidad o alcance aproximado de 7 m y un retardo de alrededor de 3 a 5 s; estos valores deben confirmarse y anotarse con la escala real del módulo. El modo de disparo no pudo cambiarse en el módulo utilizado, por lo que esta limitación debe mantenerse documentada al repetir las pruebas.
+
+7. **Cumplimiento académico pendiente.** La documentación cubre los diagramas, el contrato, la vinculación y el modelo de interacción exigidos, pero el modo automático constituye una diferencia con el control exclusivamente por voz. Resolver esa diferencia y aportar evidencias de la versión final, configuración, pruebas y montaje es necesario antes de afirmar cumplimiento integral. Las conclusiones se limitan a los resultados disponibles y no anticipan una calificación ni el resultado de la demo.
 
 ## 7. Recomendaciones
 
@@ -327,6 +346,7 @@ Tras validar la práctica, ajustar frecuencia según costo y fiabilidad observad
 ## 8. Anexos
 
 - [Guía de defensa](defensa.md) y [registro de evidencias](../evidencias/README.md).
+- [Revisión de los cuatro criterios y acciones específicas pendientes](revision-rubrica.md).
 - [Consigna original](../Práctica_3.md).
 - Fotografías, videos, CSV, capturas AWS y matriz de ensayos: pendientes de incorporación por el grupo.
 - Región, cuenta, Thing, endpoint ATS, ID de skill, placa y Lambda `Alexa`: registrados en [configuración](configuracion.md). Integrantes y aportes: pendientes.
@@ -341,10 +361,10 @@ Tras validar la práctica, ajustar frecuencia según costo y fiabilidad observad
 - [Alexa: invocación de skills Custom](https://developer.amazon.com/en-US/docs/alexa/custom-skills/understanding-how-users-invoke-custom-skills.html).
 - [Adafruit: comportamiento y estabilización de PIR](https://learn.adafruit.com/pir-passive-infrared-proximity-motion-sensor?view=all).
 
-## Evidencia de ejecucion prolongada EP01 (incorporada 2026-11-09)
+### Evidencia de ejecución prolongada EP01 (incorporada 2026-11-09)
 
 El registro serie aportado por el usuario abarca 16 min 50,079 s desde arranque: 11 ciclos iniciados y terminados declarados, ocho tras calentamiento. Desde la primera muestra lista hasta la ultima hay 15 min 42,995 s sin reinicios visibles. N01 queda PARCIAL: faltan diez ciclos tras calentamiento, consultas por minuto, alternancia de modo y uptimeSeconds.
 
 Siete HIGH listos coinciden con inicio de ciclo; otro HIGH a 431618 ms no activa, solo 14,727 s despues del ciclo anterior, compatible con cooldown. Hay conexion MQTT y confirmaciones repetidas de reported aceptado. P01/P02/P03/P11/N04 reciben evidencia parcial. No hay referencia fisica para exactitud, tiempos de solicitud/movimiento para latencia ni timestamps de accepted para frecuencia de nube. No se valida Alexa, recuperacion o posicion mecanica.
 
-La fecha de ejecucion y el binario no fueron informados. Los mensajes de angulo/LED no existen en el firmware local: identificar la version cargada y revisar la restriccion P16 sobre LED funcional. Ver [analisis, cobertura y limites](../evidencias/ejecucion-prolongada.md) y sus CSV. No se cambiaron los criterios originales ni el firmware.
+La fecha de ejecución y el binario no fueron informados. El código actual sí incluye mensajes de ángulo y LED, incorporados después según el análisis EP01; esa coincidencia no identifica el binario ensayado. El enfriamiento de aquella evidencia era de 60 s y el actual es de 5 s: el flanco ignorado a 14,727 s no valida la configuración actual. Ver [análisis, cobertura y límites](../evidencias/ejecucion-prolongada.md) y sus CSV. El módulo fue identificado en ese registro como HW-416-B, mientras el diseño lo denomina HC-SR501: confirmar el modelo físico antes de cerrar circuito y exactitud.
