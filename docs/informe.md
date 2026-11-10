@@ -51,7 +51,7 @@ Son **criterios de aceptación por medir**, no garantías de rendimiento ya demo
 | Datos antiguos | Alexa no presenta como actuales muestras con más de 45 s o reloj inválido |
 | Seguridad | TLS con validación de CA y certificado cliente; cero secretos versionados; ID de skill validado |
 
-La prueba PIR que se documenta aquí es funcional y cualitativa: el usuario identifica los HIGH de los logs con la mano de un estudiante frente al sensor y los LOW con el sensor dirigido a una pared para evitar detecciones espurias. La tabla de P01 registra el barrido cercano de 0–50 cm. Estos ensayos verifican detección en las condiciones observadas, pero no producen una tasa de error estadística generalizable. La tensión y el uso del LED integrado como simple indicador se registran según la configuración reportada y las fotografías.
+La prueba PIR que se documenta aquí es funcional y cualitativa: el usuario identifica los HIGH de los logs con la mano de un estudiante frente al sensor y los LOW con el sensor dirigido a una pared para evitar detecciones espurias. La tabla de P01 registra el barrido cercano de 0–50 cm. El usuario informa que el alcance se ajusta manualmente con los potenciómetros y que el límite mínimo configurable del alcance máximo es 300 cm; también informa un retardo ajustable entre 5 y 7 s. Estos valores describen el ajuste/rango del módulo informado, no una distancia de detección medida en esta prueba. El barrido de 0–50 cm no acredita el umbral de 300 cm ni permite afirmar el alcance máximo efectivamente ajustado. Los ensayos no producen una tasa de error estadística generalizable. La tensión y el uso del LED integrado como simple indicador se registran según la configuración reportada y las fotografías.
 
 ## 2. Análisis y diseño
 
@@ -326,7 +326,7 @@ El [plan y los procedimientos](pruebas.md) definen los casos. La [carpeta de evi
 
 ### Detalle del barrido P01
 
-Se probó el PIR desde 0 hasta 50 cm, avanzando 5 cm en cada ensayo. En todas las posiciones reportadas se detectó el objeto y la salida se puso en HIGH.
+Se probó el PIR desde 0 hasta 50 cm, avanzando 5 cm en cada ensayo. En todas las posiciones reportadas se detectó el objeto y la salida se puso en HIGH. Según el usuario, el módulo permite ajustar manualmente con sus potenciómetros el alcance máximo, cuyo límite mínimo configurable es 300 cm, y un retardo entre 5 y 7 s. No se aportó una medición de detección a 300 cm ni el valor exacto al que quedó ajustado el alcance; por eso, P01 acredita solo el barrido realizado de 0–50 cm, no el alcance máximo configurado o efectivo.
 
 | Distancia | Salida PIR | Resultado |
 |---:|:---:|---|

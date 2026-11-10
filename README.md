@@ -11,6 +11,7 @@ Base de un ambientador controlado por una skill personalizada de Alexa, con ESP3
 - [Diseño y base del informe](docs/informe.md): las ocho secciones exigidas, contrato Shadow y diagramas.
 - [Plan de pruebas](docs/pruebas.md): criterios medibles, procedimientos y registro de evidencias.
 - [Guía de defensa](docs/defensa.md): decisiones, límites y recorrido de demostración.
+- [Defensa del firmware y configuración](docs/defensa-ambientador.md): recorrido de `Ambientador.cpp`, parámetros, montaje y resultados comprobados.
 - [Configuraciones AWS](infra/): tabla, políticas y ejemplos de Shadow.
 
 ## Comportamiento

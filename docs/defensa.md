@@ -1,5 +1,7 @@
 # Referencia para la defensa y demostración
 
+Para el recorrido detallado del firmware `Ambientador.cpp`, sus parámetros de PlatformIO/hardware y la evidencia asociada, consultar la [defensa del firmware y la configuración](defensa-ambientador.md).
+
 ## Recorrido de demostración
 
 1. Mostrar circuito, fuente de 5 V, tierras comunes y separación de alimentación del servo. Identificar PIR y SG90; explicar que el firmware representa fase y ángulo ordenado.
